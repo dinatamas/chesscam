@@ -1,7 +1,7 @@
 chesscam
 ========
 
-> dinatamaspal | 13th December, 2021
+> dinatamaspal | 14th December, 2021
 
 chesscam is a computer vision application that detects a
 chessboard on a video feed and follows the moves made.

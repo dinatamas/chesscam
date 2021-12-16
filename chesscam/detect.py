@@ -49,7 +49,7 @@ def segment_board(img):
         k = cvu.closest_among(harris, k)
 
     # Build up the board and position the kernel within it.
-    # The board is stored file-wise: a1, a2, a3, ..., b1, ..., h8.
+    # The board is stored file-wise: left-to-right, top-to-bottom.
     # The transpose of board is the row-wise repsentation (board.T).
     # This variable contains the pixels of the corners of squares (9x9).
     board = np.full((9, 9), None)
@@ -57,17 +57,17 @@ def segment_board(img):
     kernel = kernel[::-1]
     for i in range(7):
         for j in range(3):
-            board[i+1][j+3] = kernel[i+j*7]
+            board[8-i-1][j+3] = kernel[i+j*7]
     debug['original'].board(board).show('board')
 
     # Calculate other points of the chessboard.
     # Perspective is taken into account here.
     # Find the closest Harris detected points to the calculated ones.
     for i in range(3, 6):
-        pt = cvu.perspective(board.T[i][1:8])
-        board[8][i] = cvu.closest_among(harris, pt)
         pt = cvu.perspective(board.T[i][1:8][::-1])
         board[0][i] = cvu.closest_among(harris, pt)
+        pt = cvu.perspective(board.T[i][1:8])
+        board[8][i] = cvu.closest_among(harris, pt)
     debug['original'].board(board).show('board')
 
     # Go through the missing ranks and calculate + detect the points.
@@ -106,5 +106,31 @@ def segment_board(img):
                     board[x][y] = cvu.intersect_lines(line1, line3)
         debug['original'].board(board).show('board')
 
+    # Cut up the board into the square segments.
+    squares = [[[] for j in range(8)] for i in range(8)]
+    for i in range(8):
+        for j in range(8):
+            squares[i][j] = (
+                board[i][j],
+                board[i+1][j],
+                board[i+1][j+1],
+                board[i][j+1])
+    # Crop each square and warp it to fill a rectangle area.
+    for i in range(8):
+        for j in range(8):
+            x = int(min(list(zip(*squares[i][j]))[0]))
+            X = int(max(list(zip(*squares[i][j]))[0]))
+            y = int(min(list(zip(*squares[i][j]))[1]))
+            Y = int(max(list(zip(*squares[i][j]))[1]))
+            cropped = img[y:Y, x:X]
+            polygon = np.float32([(p[0] - x, p[1] - y) for p in squares[i][j]])
+            rectangle = np.float32([[0, 0], [0, Y-y], [X-x, Y-y], [X-x, 0]])
+            transform = cv.getPerspectiveTransform(polygon, rectangle)
+            squares[i][j] = cv.warpPerspective(cropped, transform, (X-x, Y-y))
+    Debug(squares[0][0]).show('0,0')
+    Debug(squares[0][7]).show('0,7')
+    Debug(squares[7][0]).show('7,0')
+    Debug(squares[7][7]).show('7,7')
+
     # Return the detected squares.
-    return True
+    return squares

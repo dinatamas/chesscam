@@ -36,4 +36,3 @@ if __name__ == '__main__':
     if not (squares := segment_board(args.img)):
         logger.critical('Detection failed')
         sys.exit(1)
-    print(squares)
