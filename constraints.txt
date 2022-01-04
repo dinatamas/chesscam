@@ -1,7 +1,13 @@
+certifi==2021.10.8
+charset-normalizer==2.0.9
+chess==1.7.0
+idna==3.3
 joblib==1.1.0
-numpy==1.21.4
+numpy==1.21.5
 opencv-python==4.3.0.38
+requests==2.26.0
 scikit-learn==1.0.1
 scipy==1.7.3
 threadpoolctl==3.0.0
 tqdm==4.62.3
+urllib3==1.26.7
