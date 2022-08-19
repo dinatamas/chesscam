@@ -15,3 +15,8 @@ Instructions
 * `pip freeze > constraints.txt`
 * `./chesscam.py --help`
 * `deactivate`
+
+Note for Wayland users
+----------------------
+
+Please export `QT_QPA_PLATFORM=xcb` before execution.
