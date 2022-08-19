@@ -14,9 +14,8 @@ from chesscam.detect import segment_board
 
 
 if __name__ == '__main__':
-    logging.basicConfig()
+    logging.basicConfig(format='%(message)s', level=logging.DEBUG)
     logger = logging.getLogger('chesscam')
-    logger.setLevel(logging.DEBUG)
 
     parser = argparse.ArgumentParser(description=(
         'Perform detection function on the input image.\n'
