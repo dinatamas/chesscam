@@ -12,25 +12,17 @@ import chesscam.chess_utils as chu
 from chesscam.debug import Debug
 from chesscam.detect import segment_board
 
-HELP = '''\
-Usage: chesscam.py IMG
-
-Perform detection function on the input IMAGE.
-Press any button to continue running when an image is shown.
-
-Optional arguments:
-  -h, --help    Print this help message and exit.'''
-
 
 if __name__ == '__main__':
     logging.basicConfig()
     logger = logging.getLogger('chesscam')
     logger.setLevel(logging.DEBUG)
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('img', type=Path)
-    #parser.add_argument('video', type=Path)
-    parser.print_help = lambda: print(HELP)
+    parser = argparse.ArgumentParser(description=(
+        'Perform detection function on the input image.\n'
+        'Press any button to continue when an image is shown.'
+    ), formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('img', type=Path, help='path to the image file')
     args = parser.parse_args()
 
     if not os.access(args.img, mode=os.R_OK):
