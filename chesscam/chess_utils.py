@@ -1,12 +1,12 @@
 #
 # Utilities related to chess.
 #
-from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
 import chess
 import numpy as np
+
 
 @dataclass
 class SquareChange:
@@ -20,7 +20,7 @@ class SquareChange:
 def construct_board(squares):
     """
     Return the python-chess board based on the square images.
-    Technically just orientates the starting position.
+    Technically just orients the starting position.
     """
     if np.average(squares[7][0]) < np.average(squares[7][6]):
         squares = np.rot90(squares, k=2)

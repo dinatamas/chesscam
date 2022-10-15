@@ -20,12 +20,12 @@ class Debug:
     def board(self, board):
         # Draw lines based on the squares.
         files, ranks = [], []
-        for dim in (files, ranks):
+        for dimension in (files, ranks):
             for i in range(9):
-                squares = board[i] if dim is files else board.T[i]
+                squares = board[i] if dimension is files else board.T[i]
                 if (pts := [p for p in squares if p]):
-                    dim.append(cvu.linear_fit(pts))
-        # Extend the lines until the borders of the board.
+                    dimension.append(cvu.linear_fit(pts))
+        # Extend the lines until the edges of the image.
         h, w = np.shape(self.buff)[:2]
         inf_files = [cvu.fit_line_in_rectangle(f, w, h) for f in files]
         inf_ranks = [cvu.fit_line_in_rectangle(r, w, h) for r in ranks]
